@@ -1,6 +1,10 @@
+import os
+import requests
 from django.db import models
 from datetime import datetime
 
+TOKEN = 'c9a3d9450858418edd708a73d631cb4b'
+API_URL = 'http://api.openweathermap.org/data/2.5/find?appid={}'.fomrat(TOKEN)
 
 class Measurement(models.Model):
     collection_time = models.DateTimeField(default=datetime.now)
@@ -13,8 +17,10 @@ class Measurement(models.Model):
     latitude = models.FloatField(default=0.0)
     longitude = models.FloatField(default=0.0)
 
-    def save_measurements(self, values):
+    def save_measurements(self, values, latitude, longitude):
         measurement = Measurement()
+        response = this.get_specific_data(latitude, longitude)
+
         measurement.collection_time = response['dt']
 
         measurement.temperature = response['main']['temp']
@@ -26,3 +32,10 @@ class Measurement(models.Model):
         measurement.location = response['name']
 
         measurement.rain_precipitation = response['rain']['1h']
+
+    def get_specific_data(self, latitude, longitude):
+        location = '&lat={}&lon={}'.format(latitude, longitude)
+
+        response = requests.get(API_URL + location)
+
+        return response
