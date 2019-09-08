@@ -1,0 +1,4 @@
+Django
+djangorestframework
+django_cron==0.5.1
+requests

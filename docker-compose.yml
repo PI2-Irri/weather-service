@@ -1,0 +1,26 @@
+version: '3.5'
+services:
+  db:
+    container_name: postgres
+    image: postgres:9.6
+    env_file: dev-env
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+
+  weather-api:
+    container_name: weather-api
+    build: .
+    env_file: dev-env
+    environment:
+      - API_URL: ${API_URL}
+      - TOKEN_ID: ${TOKEN_ID}
+    command: ["sh", "scripts/start.sh"]
+    ports:
+      - 4000:4000
+    volumes:
+      - .:/weather-api
+    depends_on:
+      - db
+
+volumes:
+  pg-data: {}
