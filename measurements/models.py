@@ -9,14 +9,13 @@ class Measurement(models.Model):
     temperature_min = models.FloatField(default=0.0)
     temperature_max = models.FloatField(default=0.0)
     wind_velocity = models.FloatField(default=0.0)
-    rain_precipitation = models.FloatField(default=0.0,null=True)
+    rain_precipitation = models.FloatField(default=0.0,null=True, blank=True)
     location = models.CharField(max_length=50)
     latitude = models.FloatField(default=0.0)
     longitude = models.FloatField(default=0.0)
 
-    def save_measurements(self, values, latitude, longitude):
+    def save_measurements(self, response):
         measurement = Measurement()
-        response = this.get_specific_data(latitude, longitude)
 
         measurement.collection_time = response['dt']
 
@@ -28,4 +27,7 @@ class Measurement(models.Model):
         measurement.longitude = response['coord']['lon']
         measurement.location = response['name']
 
-        measurement.rain_precipitation = response['rain']['1h']
+        try:
+            measurement.rain_precipitation = response['rain']['1h']
+        except Exception as exception:
+            measurement.rain_precipitation = None
