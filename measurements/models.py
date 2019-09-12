@@ -2,6 +2,7 @@ from django.db import models
 from datetime import datetime
 
 from .utils import *
+from measurements.models import Location
 
 class Measurement(models.Model):
     collection_time = models.DateTimeField(default=datetime.now)
@@ -10,11 +11,16 @@ class Measurement(models.Model):
     temperature_max = models.FloatField(default=0.0)
     wind_velocity = models.FloatField(default=0.0)
     rain_precipitation = models.FloatField(default=0.0,null=True, blank=True)
-    location = models.CharField(max_length=50)
-    latitude = models.FloatField(default=0.0)
-    longitude = models.FloatField(default=0.0)
+
+    location = models.ForeignKey(Location, on_delete=models.CASCADE)
 
     def save_measurements(self, response):
+        location = Location()
+
+        location.location_name = response['name']
+        location.latitude = response['coord']['lat']
+        location.longitude = response['coord']['lon']
+
         measurement = Measurement()
 
         measurement.collection_time = response['dt']
@@ -25,7 +31,7 @@ class Measurement(models.Model):
         measurement.wind_velocity = response['wind']['speed']
         measurement.latitude = response['coord']['lat']
         measurement.longitude = response['coord']['lon']
-        measurement.location = response['name']
+        measurement.location = location
 
         try:
             measurement.rain_precipitation = response['rain']['1h']
