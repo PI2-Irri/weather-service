@@ -1,6 +1,30 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+from rest_framework import serializers, viewsets, mixins
+from .models import Location
 
-from django.shortcuts import render
 
-# Create your views here.
+class LocationViewSet(mixins.RetrieveModelMixin,
+                      mixins.DestroyModelMixin,
+                      mixins.ListModelMixin,
+                      viewsets.GenericViewSet):
+
+    queryset = Location.objects.all()
+    serializer_class = LocationSerializer
+
+    def get_queryset(self):
+        location_name = self.request.query_params.get('location', None)
+        latitude = self.request.query_params.get('latitude', None)
+        longitude = self.request.query_params.get('longitude', None)
+
+        if location_name is not None:
+            if latitude is not None and longitude is not None:
+                self.queryset = self.queryset.filter(
+                    location_name=location_name,
+                    latitude=float("{0:.2f}".format(latitude)),
+                    longitude=float("{0:.2f}".format(longitude))
+                )
+            else:
+                self.queryset = self.queryset.filter(
+                    location_name=location_name
+                )
+
+        return self.queryset
