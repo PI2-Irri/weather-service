@@ -12,8 +12,8 @@ services:
     build: .
     env_file: dev-env
     environment:
-      - API_URL: ${API_URL}
-      - TOKEN_ID: ${TOKEN_ID}
+      - API_URL: {API_URL}
+      - TOKEN_ID: {TOKEN_ID}
     command: ["sh", "scripts/start.sh"]
     ports:
       - 4000:4000
