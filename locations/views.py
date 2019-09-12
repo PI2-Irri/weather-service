@@ -1,11 +1,9 @@
 from rest_framework import serializers, viewsets, mixins
 from .models import Location
+from .serializers import LocationSerializer
 
 
-class LocationViewSet(mixins.RetrieveModelMixin,
-                      mixins.DestroyModelMixin,
-                      mixins.ListModelMixin,
-                      viewsets.GenericViewSet):
+class LocationViewSet(viewsets.ModelViewSet):
 
     queryset = Location.objects.all()
     serializer_class = LocationSerializer

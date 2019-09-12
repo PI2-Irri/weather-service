@@ -1,4 +1,6 @@
 Django
 djangorestframework
 django_cron==0.5.1
+django-environ==0.4.4
 requests
+psycopg2

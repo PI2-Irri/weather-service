@@ -28,7 +28,7 @@ SECRET_KEY = '-a&o9wvjc426-&(wr0mhhak_q4awqgaysr5ymr^3&!k&-=yhu0'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'restframework',
+    'rest_framework',
     'django_cron',
     'measurements',
     'locations'

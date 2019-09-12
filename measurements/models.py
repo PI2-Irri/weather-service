@@ -1,8 +1,7 @@
 from django.db import models
 from datetime import datetime
 
-from .utils import *
-from measurements.models import Location
+from locations.models import Location
 
 class Measurement(models.Model):
     collection_time = models.DateTimeField(default=datetime.now)
