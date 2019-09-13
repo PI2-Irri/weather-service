@@ -19,11 +19,16 @@ from django.urls import include
 from rest_framework.routers import DefaultRouter
 
 from locations import views as location_view
+from measurements import views as measurement_view
 
 router = DefaultRouter()
 router.register(
     r'locations',
     location_view.LocationViewSet
+)
+router.register(
+    r'measurement',
+    measurement_view.MeasurementViewSet
 )
 
 urlpatterns = [
