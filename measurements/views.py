@@ -14,6 +14,7 @@ class MeasurementViewSet(viewsets.ModelViewSet):
         longitude = self.request.query_params.get('longitude', None)
         start_date = self.request.query_params.get('start_date', None)
         end_date = self.request.query_params.get('end_date', None)
+        location = None
 
         if location_name is not None:
             try:
@@ -23,7 +24,7 @@ class MeasurementViewSet(viewsets.ModelViewSet):
                     longitude=float("{0:.2f}".format(longitude))
                 )
             except Exception as exception:
-                location = None
+                print(exception)
 
         if location is not None:
             self.queryset = self.queryset.filter(location=location)
