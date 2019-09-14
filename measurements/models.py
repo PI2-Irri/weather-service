@@ -13,16 +13,13 @@ class Measurement(models.Model):
 
     location = models.ForeignKey(Location, on_delete=models.CASCADE)
 
-    def save_measurements(self, location, response):
-        pass
-
     def transform_data(self, data_integer):
         data = datetime.fromtimestamp(data_integer)
         return data
 
 class MinutelyMeasurement(Measurement):
     def save_measurements(self, location, response):
-        measurement = Measurement()
+        measurement = MinutelyMeasurement()
         measurement.collection_time = self.transform_data(response['dt'])
 
         measurement.temperature = response['main']['temp']
@@ -44,26 +41,27 @@ class MinutelyMeasurement(Measurement):
 
 class ForecastMeasurement(Measurement):
     def save_measurements(self, location, response):
-        measurement = Measurement()
-        measurement.collection_time = self.transform_data(response['dt'])
+        for data in response:
+            measurement = ForecastMeasurement()
+            measurement.collection_time = self.transform_data(data['dt'])
 
-        measurement.temperature = response['main']['temp']
-        measurement.temperature_min = response['main']['temp_min']
-        measurement.temperature_max = response['main']['temp_max']
-        measurement.wind_velocity = response['wind']['speed']
+            measurement.temperature = data['main']['temp']
+            measurement.temperature_min = data['main']['temp_min']
+            measurement.temperature_max = data['main']['temp_max']
+            measurement.wind_velocity = data['wind']['speed']
 
-        try:
-            measurement.latitude = response['coord']['lat']
-            measurement.longitude = response['coord']['lon']
-        except Exception as exception:
-            measurement.latitude = location.latitude
-            measurement.longitude = location.longitude
+            try:
+                measurement.latitude = data['coord']['lat']
+                measurement.longitude = data['coord']['lon']
+            except Exception as exception:
+                measurement.latitude = location.latitude
+                measurement.longitude = location.longitude
 
-        measurement.location = location
+            measurement.location = location
 
-        try:
-            measurement.rain_precipitation = response['rain']['1h']
-        except Exception as exception:
-            measurement.rain_precipitation = None
+            try:
+                measurement.rain_precipitation = data['rain']['1h']
+            except Exception as exception:
+                measurement.rain_precipitation = None
 
-        measurement.save()
+            measurement.save()

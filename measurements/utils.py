@@ -1,6 +1,6 @@
 import os
 import requests
-from .models import Measurement
+from .models import MinutelyMeasurement
 from .models import ForecastMeasurement
 from locations.models import Location
 
@@ -12,7 +12,7 @@ class DataCollector():
     def get_specific_data(self, latitude, longitude, url):
         location = '&lat={}&lon={}'.format(latitude, longitude)
         response = requests.get(url + TOKEN + location).json()
-        print("Get specific data: {}".format(API_URL + TOKEN + location))
+        print("Get specific data: {}".format(url + TOKEN + location))
         return response['list']
 
     def save_minutelly_data(self, location):
@@ -30,7 +30,7 @@ class DataCollector():
             location.longitude,
             FORECAST_URL
         )
-        measurement = ForecastMeasurement
+        measurement = ForecastMeasurement()
         measurement.save_measurements(location, response[0:7])
 
     def collect_minutely_measurements(self):

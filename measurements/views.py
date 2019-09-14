@@ -1,12 +1,13 @@
 from rest_framework import viewsets
-from .models import Measurement
+from .models import MinutelyMeasurement
+from .models import ForecastMeasurement
 from .models import Location
-from .serializers import MeasurementSerializer
+from .serializers import MinutelyMeasurementSerializer
+from .serializers import ForecastMeasurementSerializer
 
 
 class MeasurementViewSet(viewsets.ModelViewSet):
-    queryset = Measurement.objects.select_related('location').all()
-    serializer_class = MeasurementSerializer
+    queryset = None
 
     def get_queryset(self):
         location_name = self.request.query_params.get('location', None)
@@ -34,3 +35,13 @@ class MeasurementViewSet(viewsets.ModelViewSet):
 
 
         return self.queryset
+
+
+class MinutelyMeasurementViewSet(MeasurementViewSet):
+    queryset = MinutelyMeasurement.objects.select_related('location').all()
+    serializer_class = MinutelyMeasurementSerializer
+
+
+class ForecastMeasurementViewSet(MeasurementViewSet):
+    queryset = ForecastMeasurement.objects.select_related('location').all()
+    serializer_class = ForecastMeasurementSerializer

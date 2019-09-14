@@ -27,8 +27,12 @@ router.register(
     location_view.LocationViewSet
 )
 router.register(
-    r'measurement',
-    measurement_view.MeasurementViewSet
+    r'minutely_measurement',
+    measurement_view.MinutelyMeasurementViewSet
+)
+router.register(
+    'forecast_measurement',
+    measurement_view.ForecastMeasurementViewSet
 )
 
 urlpatterns = [
