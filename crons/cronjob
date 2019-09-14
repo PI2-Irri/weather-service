@@ -1,2 +1,3 @@
-* * * * * export $(cat /root/env | xargs) && python /weather-service/manage.py runcrons measurements.cronjob.CollectMeasurementCronJob >> /home/out_collection.log
+* * * * * export $(cat /root/env | xargs) && python /weather-service/manage.py runcrons measurements.cronjob.CollectMeasurementCronJob >> /home/out_minutelly.log
+0 0 * * * export $(cat /root/env | xargs) && python /weather-service/manage.py runcrons measurements.cronjob.CollectForecastCronJob >> /home/out_forecast.log
 # Necessary line at end of file to make cron valid
