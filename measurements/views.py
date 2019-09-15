@@ -1,4 +1,4 @@
-from rest_framework import viewsets
+from rest_framework import viewsets, mixins
 from .models import MinutelyMeasurement
 from .models import ForecastMeasurement
 from .models import Location
@@ -6,7 +6,10 @@ from .serializers import MinutelyMeasurementSerializer
 from .serializers import ForecastMeasurementSerializer
 
 
-class MeasurementViewSet(viewsets.ModelViewSet):
+class MeasurementViewSet(mixins.RetrieveModelMixin,
+                         mixins.DestroyModelMixin,
+                         mixins.ListModelMixin,
+                         viewsets.GenericViewSet):
     queryset = None
 
     def get_queryset(self):
@@ -34,14 +37,14 @@ class MeasurementViewSet(viewsets.ModelViewSet):
             pass
 
 
-        return self.queryset
+        return self.queryset.reverse()
 
 
 class MinutelyMeasurementViewSet(MeasurementViewSet):
-    queryset = MinutelyMeasurement.objects.select_related('location').all()
+    queryset = MinutelyMeasurement.objects.select_related('location').all().order_by('id')
     serializer_class = MinutelyMeasurementSerializer
 
 
 class ForecastMeasurementViewSet(MeasurementViewSet):
-    queryset = ForecastMeasurement.objects.select_related('location').all()
+    queryset = ForecastMeasurement.objects.select_related('location').all().order_by('id')
     serializer_class = ForecastMeasurementSerializer

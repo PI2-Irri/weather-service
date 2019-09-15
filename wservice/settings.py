@@ -74,6 +74,11 @@ TEMPLATES = [
     },
 ]
 
+CRON_CLASSES = [
+    'measurements.cronjob.CollectMeasurementCronJob',
+    'measurements.cronjob.CollectForecastCronJob'
+]
+
 WSGI_APPLICATION = 'wservice.wsgi.application'
 
 
