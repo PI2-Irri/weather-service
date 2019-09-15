@@ -19,7 +19,7 @@ services:
     ports:
       - 4000:4000
     volumes:
-      - .:/weather-api
+      - .:/weather-service
     depends_on:
       - db
 
