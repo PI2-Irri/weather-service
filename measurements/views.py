@@ -34,8 +34,12 @@ class MeasurementViewSet(mixins.RetrieveModelMixin,
             self.queryset = self.queryset.filter(location=location)
 
         if start_date is not None and end_date is not None:
-            pass
-
+            self.queryset = self.queryset.filter(
+                collection_time__gte=start_date
+            )
+            self.queryset = self.queryset.filter(
+                collection_time__lte=end_date
+            )
 
         return self.queryset.reverse()
 
