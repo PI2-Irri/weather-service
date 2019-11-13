@@ -11,8 +11,8 @@ FORECAST_URL = os.getenv('FORECAST_URL', '')
 class DataCollector():
     def get_specific_data(self, latitude, longitude, url):
         location = '&lat={}&lon={}'.format(latitude, longitude)
-        response = requests.get(url + TOKEN + location).json()
-        print("Get specific data: {}".format(url + TOKEN + location))
+        response = requests.get(url + '?appid=' + TOKEN + location + '&units=metric').json()
+        print("Get specific data: {}".format(url + '?appid=' + TOKEN + location))
         return response['list']
 
     def save_minutelly_data(self, location):
