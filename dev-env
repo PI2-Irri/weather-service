@@ -3,3 +3,6 @@ POSTGRES_PASSWORD=password
 POSTGRES_DB=weather-service-dev
 POSTGRES_PORT=5432
 POSTGRES_HOST=db
+API_URL=http://api.openweathermap.org/data/2.5/find
+FORECAST_URL=http://api.openweathermap.org/data/2.5/forecast
+TOKEN_ID=c9a3d9450858418edd708a73d631cb4b
