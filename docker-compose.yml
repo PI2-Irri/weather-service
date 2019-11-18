@@ -6,6 +6,8 @@ services:
     env_file: dev-env
     volumes:
       - pg-data:/var/lib/postgresql/data
+    networks:
+      - weather-service-network
 
   weather-api:
     container_name: weather-api
@@ -18,6 +20,13 @@ services:
       - .:/weather-service
     depends_on:
       - db
+    networks:
+      - weather-service-network
 
 volumes:
   pg-data: {}
+
+networks:
+  weather-service-network:
+    name: weather-service-network
+    driver: bridge
