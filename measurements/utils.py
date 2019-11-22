@@ -13,10 +13,11 @@ class DataCollector():
         if latitude and longitude:
             location = '&lat={}&lon={}'.format(latitude, longitude)
         else:
-            location = '&q='+ location_name + ',br'
+            location = '&q=' + location_name + ',br'
 
         response = requests.get(url + '?appid=' + TOKEN + location + '&units=metric').json()
         print("Get specific data: {}".format(url + '?appid=' + TOKEN + location))
+        print(response)
         return response['list']
 
     def save_minutelly_data(self, location):
