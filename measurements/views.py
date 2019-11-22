@@ -39,7 +39,10 @@ class MeasurementViewSet(mixins.RetrieveModelMixin,
                 collection_time__lte=end_date
             )
 
-        return self.queryset.reverse()
+        if self.queryset.last():
+            return [self.queryset.last()]
+        else:
+            return []
 
 
 class MinutelyMeasurementViewSet(MeasurementViewSet):
