@@ -3,10 +3,23 @@
 # Exporting all environment variables to use in crontab
 env | sed 's/^\(.*\)$/ \1/g' > /root/env
 
-while ! pg_isready -h $POSTGRES_HOST -p $POSTGRES_PORT -q -U $POSTGRES_USER; do
-  >&2 echo "Postgres is unavailable - sleeping...";
-  sleep 5;
-done;
+
+function_postgres_ready() {
+python << END
+import socket
+import time
+import os
+
+port = int(os.environ["POSTGRES_PORT"])
+host = os.environ["POSTGRES_HOST"]
+
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+s.connect(('db', port))
+s.close()
+END
+}
+
 >&2 echo "Postgres is up - executing commands...";
 
 echo '======= MAKING MIGRATIONS'
