@@ -30,6 +30,7 @@ python3 manage.py migrate
 
 echo '======= STARTING CRON'
 cron
+python3 /weather-service/manage.py runcrons measurements.cronjob.CollectForecastCronJob >> /home/out_forecast.log
 
 echo '======= RUNNING SERVER'
 python3 manage.py runserver 0.0.0.0:4000
