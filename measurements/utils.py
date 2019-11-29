@@ -17,7 +17,6 @@ class DataCollector():
 
         response = requests.get(url + '?appid=' + TOKEN + location + '&units=metric').json()
         print("Get specific data: {}".format(url + '?appid=' + TOKEN + location))
-        print(response)
         return response['list']
 
     def save_minutelly_data(self, location):

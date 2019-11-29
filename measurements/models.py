@@ -1,5 +1,5 @@
 from django.db import models
-from datetime import datetime
+from django.utils.timezone import datetime
 
 from locations.models import Location
 
@@ -60,7 +60,7 @@ class ForecastMeasurement(Measurement):
             measurement.location = location
 
             try:
-                measurement.rain_precipitation = data['rain']['1h']
+                measurement.rain_precipitation = data['rain']['3h']
             except Exception as exception:
                 measurement.rain_precipitation = None
 

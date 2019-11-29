@@ -4,6 +4,7 @@ from .models import ForecastMeasurement
 from .models import Location
 from .serializers import MinutelyMeasurementSerializer
 from .serializers import ForecastMeasurementSerializer
+from rest_framework.exceptions import APIException
 
 
 class MeasurementViewSet(mixins.RetrieveModelMixin,
@@ -22,34 +23,46 @@ class MeasurementViewSet(mixins.RetrieveModelMixin,
 
         if location_name is not None:
             try:
-                location = self.queryset.filter(
-                    location_name=location_name,
-                    latitude=float("{0:.2f}".format(latitude)),
-                    longitude=float("{0:.2f}".format(longitude))
+                location = self.queryset.get(
+                    location_name=location_name
                 )
             except Exception as exception:
-                print(exception)
+                try:
+                    location = self.queryset.get(
+                        latitude=float("{0:.2f}".format(latitude)),
+                        longitude=float("{0:.2f}".format(longitude))
+                    )
+                except Exception as exception:
+                    raise APIException(
+                        {'error': 'Location not valid.'}
+                    )
 
         if location is not None:
             self.queryset = self.queryset.filter(location=location)
 
-        if start_date is not None and end_date is not None:
+        if start_date and end_date:
             self.queryset = self.queryset.filter(
                 collection_time__gte=start_date,
                 collection_time__lte=end_date
             )
+            for q in self.queryset:
+                print(q.__dict__)
 
-        if self.queryset.last():
-            return [self.queryset.last()]
+        if self.option == 'minutely':
+            if self.queryset.last():
+                return [self.queryset.last()]
+            else:
+                return []
         else:
-            return []
+            return self.queryset.reverse()
 
 
 class MinutelyMeasurementViewSet(MeasurementViewSet):
     queryset = MinutelyMeasurement.objects.select_related('location').all().order_by('id')
     serializer_class = MinutelyMeasurementSerializer
-
+    option = 'minutely'
 
 class ForecastMeasurementViewSet(MeasurementViewSet):
     queryset = ForecastMeasurement.objects.select_related('location').all().order_by('id')
     serializer_class = ForecastMeasurementSerializer
+    option = 'forecast'

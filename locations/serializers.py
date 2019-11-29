@@ -14,11 +14,15 @@ class LocationSerializer(serializers.HyperlinkedModelSerializer):
             'longitude',
             'url'
         )
-   
+
     def create(self, validated_data):
 
         try:
             location = Location.objects.get(location_name=validated_data.get('location_name'))
+
+            raise APIException(
+                {'detail': 'Location already exists.'}
+            )
         except Location.DoesNotExist:
 
             try:
